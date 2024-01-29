@@ -1,7 +1,94 @@
-let app = new Vue({
-    el: '#app',
-    data: {
-        product: "Socks",
+Vue.component('product-details', {
+    props: {
+      details: {
+        type: Array,
+        required: true
+      }
+    },
+    template: `
+      <ul>
+        <li v-for="detail in details">{{ detail }}</li>
+      </ul>
+    `
+  })
+
+
+
+Vue.component('product', {
+    props: {
+        premium: {
+            type: Boolean,
+            required: true
+        }
+    },
+    template: `
+    <div class="product">
+
+        <div class="product-image">
+            <img :src="image" :alt="altText" />
+        </div>
+
+        <div class="product-info">
+            <h1>{{ title }}</h1>
+            <span style="color: red; font-size: 30px" v-show='onSale'>{{onSaleText}}          </span>
+
+            <span style="color: #1E95EA; font-size: 30px" v-if="inventory > 10">In stock</span>
+            <p>User is premium: {{ premium }}</p>
+            <p>{{ sale }}</p>
+
+
+
+
+            <p style="color: #1E95EA; font-size: 30px" v-else-if="inventory <= 10 && inventory > 0">Almost sold out!</p>
+
+            <p v-else
+               class="underline"
+            >Out of stock</p>
+
+            <p>{{ description }}</p>
+
+
+            <product-details :details="details"></product-details>
+
+            <p>Shipping: {{ shipping }}</p>
+
+            <div
+                    class="color-box"
+                    v-for="(variant, index) in variants"
+                    :key="variant.variantId"
+                    :style="{ backgroundColor:variant.variantColor }"
+                    @mouseover="updateProduct(index)"
+            >
+            </div>
+
+            <div v-for="size in sizes">
+                <p>{{ size }}</p>
+            </div>
+
+            <div class="cart">
+                <p>Cart({{ cart }})</p>
+            </div>
+
+            <button
+                    v-on:click="addToCart"
+                    :disabled="!inStock"
+                    :class="{ disabledButton: !inStock  }"
+            >
+                {{cartAdd}}
+            </button>
+
+            <button style="background-color: red" v-on:click="removeToCart">{{cartRemove}}</button><br><br>
+
+            <a :href="link">{{linkText}}</a>
+        </div>
+
+
+
+    </div>
+    `,
+    data(){
+        return {
+            product: "Socks",
         brand: 'Vue Mastery',
         description: 'A pair of warm, fuzzy socks',
         selectedVariant: 0,
@@ -31,11 +118,7 @@ let app = new Vue({
         cart: 0,
         cartAdd: 'Add to cart',
         cartRemove: 'Remove to cart',
-
-
-
-
-
+        }
     },
     methods: {
         addToCart() {
@@ -51,12 +134,7 @@ let app = new Vue({
         updateProduct(index) {
             this.selectedVariant = index;
             console.log(index);
-        },
-
-
-
-
-
+        }
     },
     computed: {
         title() {
@@ -73,9 +151,25 @@ let app = new Vue({
                 return this.brand + ' ' + this.product + ' are on sale!'
             }
             return  this.brand + ' ' + this.product + ' are not on sale'
-        }
-
+        },
+        shipping() {
+            if (this.premium) {
+                return "Free";
+            } else {
+                return 2.99
+            }
+         }
+         
     }
-
 })
+
+let app = new Vue({
+    el: '#app',
+    data: {
+        premium: true
+    }
+ })
+ 
+ 
+ 
 

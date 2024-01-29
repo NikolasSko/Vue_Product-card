@@ -11,70 +11,9 @@
     <title>Product App</title>
 </head>
 <body>
-<div id="app">
-
-    <div class="product">
-
-        <div class="product-image">
-            <img :src="image" :alt="altText" />
-        </div>
-
-        <div class="product-info">
-            <h1>{{ title }}</h1>
-            <p>{{ sale }}</p>
-
-            <span style="color: red; font-size: 30px" v-show='onSale'>{{onSaleText}}          </span>
-
-            <span style="color: #1E95EA; font-size: 30px" v-if="inventory > 10">In stock</span>
-
-
-            <p style="color: #1E95EA; font-size: 30px" v-else-if="inventory <= 10 && inventory > 0">Almost sold out!</p>
-
-            <p v-else
-               class="underline"
-            >Out of stock</p>
-
-            <p>{{ description }}</p>
-
-
-            <ul>
-                <li v-for="detail in details">{{ detail }}</li>
-            </ul>
-
-            <div
-                    class="color-box"
-                    v-for="(variant, index) in variants"
-                    :key="variant.variantId"
-                    :style="{ backgroundColor:variant.variantColor }"
-                    @mouseover="updateProduct(index)"
-            >
-            </div>
-
-            <div v-for="size in sizes">
-                <p>{{ size }}</p>
-            </div>
-
-            <div class="cart">
-                <p>Cart({{ cart }})</p>
-            </div>
-
-            <button
-                    v-on:click="addToCart"
-                    :disabled="!inStock"
-                    :class="{ disabledButton: !inStock  }"
-            >
-                {{cartAdd}}
-            </button>
-
-            <button style="background-color: red" v-on:click="removeToCart">{{cartRemove}}</button><br><br>
-
-            <a :href="link">{{linkText}}</a>
-        </div>
-
-
-
-    </div>
-</div>
+    <div id="app">
+        <product :premium="premium"></product>
+     </div>
 
 
 </body>
