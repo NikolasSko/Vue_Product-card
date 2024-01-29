@@ -21,8 +21,13 @@
 
         <div class="product-info">
             <h1>{{ product }}</h1>
+            <span style="color: red; font-size: 30px" v-show='onSale'>{{onSaleText}}          </span>
+            <span style="color: #1E95EA; font-size: 30px" v-if="inventory > 10">In stock</span>
+            <p style="color: #1E95EA; font-size: 30px" v-else-if="inventory <= 10 && inventory > 0">Almost sold out!</p>
             <p>{{ description }}</p>
             <a :href="link">{{linkText}}</a>
+            <p v-else>Out of stock</p>
+
         </div>
 
 
