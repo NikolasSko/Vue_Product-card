@@ -21,28 +21,52 @@
 
         <div class="product-info">
             <h1>{{ product }}</h1>
+
             <span style="color: red; font-size: 30px" v-show='onSale'>{{onSaleText}}          </span>
+
             <span style="color: #1E95EA; font-size: 30px" v-if="inventory > 10">In stock</span>
+
+
             <p style="color: #1E95EA; font-size: 30px" v-else-if="inventory <= 10 && inventory > 0">Almost sold out!</p>
+
+            <p v-else
+               class="underline"
+            >Out of stock</p>
+
             <p>{{ description }}</p>
-            <p v-else>Out of stock</p>
+
+
             <ul>
                 <li v-for="detail in details">{{ detail }}</li>
             </ul>
 
-            <div v-for="variant in variants" :key="variant.variantId">
-                <p @mouseover="updateProduct(variant.variantImage)">
-                    {{ variant.variantColor }}
-                </p>
+            <div
+                    class="color-box"
+                    v-for="variant in variants"
+                    :key="variant.variantId"
+                    :style="{ backgroundColor:variant.variantColor }"
+                    @mouseover="updateProduct(variant.variantImage)"
+            >
             </div>
+
             <div v-for="size in sizes">
                 <p>{{ size }}</p>
             </div>
+
             <div class="cart">
                 <p>Cart({{ cart }})</p>
             </div>
-            <button style="background-color: green" v-on:click="addToCart">{{cartAdd}}</button><br><br>
+
+            <button
+                    v-on:click="addToCart"
+                    :disabled="!inStock"
+                    :class="{ disabledButton: !inStock  }"
+            >
+                {{cartAdd}}
+            </button>
+
             <button style="background-color: red" v-on:click="removeToCart">{{cartRemove}}</button><br><br>
+
             <a :href="link">{{linkText}}</a>
         </div>
 
