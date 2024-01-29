@@ -25,9 +25,18 @@
             <span style="color: #1E95EA; font-size: 30px" v-if="inventory > 10">In stock</span>
             <p style="color: #1E95EA; font-size: 30px" v-else-if="inventory <= 10 && inventory > 0">Almost sold out!</p>
             <p>{{ description }}</p>
-            <a :href="link">{{linkText}}</a>
             <p v-else>Out of stock</p>
+            <ul>
+                <li v-for="detail in details">{{ detail }}</li>
+            </ul>
 
+            <div v-for="variant in variants" :key="variant.variantId">
+                <p>{{ variant.variantColor }}</p>
+            </div>
+            <div v-for="size in sizes">
+                <p>{{ size }}</p>
+            </div>
+            <a :href="link">{{linkText}}</a>
         </div>
 
 
