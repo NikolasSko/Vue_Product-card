@@ -91,3 +91,14 @@ textarea {
 .underline{
     text-decoration: line-through;
 }
+
+.sizes{
+    position: relative;
+    top: 10px;
+}
+
+.size:hover{
+
+    font-size: 14px;
+    color: blue;
+}

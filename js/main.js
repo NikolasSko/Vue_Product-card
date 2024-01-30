@@ -166,9 +166,10 @@ Vue.component('product', {
 
         <div class="product-info">
             <h1>{{ title }}</h1>
-            <span style="color: red; font-size: 30px" v-show='onSale'>{{onSaleText}}          </span>
+            <span v-if="variants[selectedVariant].variantQuantity !== 0" style="color: red; font-size: 30px"  v-show='onSale'>{{onSaleText}}          </span>
+            <span v-else="variants[selectedVariant].variantQuantity !== 0" style="color: red; font-size: 30px"  >Отсутствует в наличии        </span>
 
-            <span style="color: #1E95EA; font-size: 30px" v-if="inventory > 10">In stock</span>
+            <span style="color: #1E95EA; font-size: 30px" v-if="variants[selectedVariant].variantQuantity !== 0"">In stock</span>
             <p>User is premium: {{ premium }}</p>
             <p>{{ sale }}</p>
 
@@ -193,14 +194,15 @@ Vue.component('product', {
                     v-for="(variant, index) in variants"
                     :key="variant.variantId"
                     :style="{ backgroundColor:variant.variantColor }"
-                    @mouseover="updateProduct(index)"
+                    @click="updateProduct(index)"
             >
             </div>
 
-            <div v-for="size in sizes">
-                <p>{{ size }}</p>
+            <div class="sizes" v-if="variants[selectedVariant].variantQuantity !== 0" v-for="(size,r) in variants[selectedVariant].variantSizes" style="display: inline">
+                <button class="size">{{ r }}&nbsp&nbsp&nbsp  </button>
             </div>
-
+            
+            <br>
             
 
             <button
@@ -210,8 +212,9 @@ Vue.component('product', {
             >
                 {{cartAdd}}
             </button>
+            <br>
 
-            <button @click="removeFromCart" style="background-color: red"
+            <button style="position: relative; top: 100px" @click="removeFromCart" style="background-color: red"
               >
             Remove from cart
             </button>
@@ -251,13 +254,30 @@ Vue.component('product', {
                 variantId: 2234,
                 variantColor: 'green',
                 variantImage: "./assets/vmSocks-green-onWhite.jpg",
-                variantQuantity: 10
+                variantQuantity: 10,
+                variantSizes: {
+                    'S': 41,
+                    'M': 1,
+                    'L': 1,
+                    'XL': 1,
+                    'XXL': 1,
+                    'XXXL': 0
+                }
             },
             {
                 variantId: 2235,
                 variantColor: 'blue',
                 variantImage: "./assets/vmSocks-blue-onWhite.jpg",
-                variantQuantity: 0
+                variantQuantity: 0,
+                variantSizes: {
+                    'S': 2,
+                    'M': 2,
+                    'L': 2,
+                    'XL': 2,
+                    'XXL': 0,
+                    'XXXL': 0
+
+                }
 
             }
         ],
@@ -298,8 +318,9 @@ Vue.component('product', {
         image() {
             return this.variants[this.selectedVariant].variantImage;
         },
+
         inStock(){
-            return this.variants[this.selectedVariant].variantQuantity
+            return this.variants[this.selectedVariant].variantQuantity && this.variants[this.selectedVariant].variantSizes;
         },
         sale() {
             if (this.onSale) {
@@ -374,7 +395,7 @@ let app = new Vue({
         cart: []
     },
     methods: {
-        updateCart(id) {
+        updateCart(id, ) {
             this.cart.push(id);
         },
         removeItem(id) {
